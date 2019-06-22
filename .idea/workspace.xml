@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../testcontainers-java" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1985" />
+    <option name="y" value="208" />
+    <option name="width" value="1855" />
+    <option name="height" value="1108" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="dart.analysis.tool.window.force.activate" value="false" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.scala.compiler.ScalaCompileServerForm" />
+    <property name="show.migrate.to.gradle.popup" value="false" />
+  </component>
+  <component name="RunManager">
+    <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
+      <option name="filePath" value="$PROJECT_DIR$/lib/main.dart" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SbtLocalSettings">
+    <option name="projectSyncType">
+      <map>
+        <entry key="$PROJECT_DIR$/../cats-sandbox" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../learn_http4s/quickstart" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../quickstart" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../scala-dev-group/example" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/activemq-auth-plugin" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/amqp-parent/tools/benchmarks" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/amqp-parent/tools/integration-tests" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/amqp-parent/tools/local-run" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/bd-play" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/push-client-scala" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/racing-post-banach-integration" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/scala-dev/1_http4s" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/scala-dev/2_http4s" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/tx_connection" value="PREVIEW" />
+        <entry key="$PROJECT_DIR$/../txodds/txodds-membership-api-client-scala" value="PREVIEW" />
+      </map>
+    </option>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>
