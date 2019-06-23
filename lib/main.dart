@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mindin/fade_route.dart';
@@ -26,6 +28,19 @@ class MindIn extends StatelessWidget {
       backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
         child: bodyWidget,
+      ),
+    );
+  }
+
+  static Widget centralMessage(String message) {
+    return Container(
+      child: Text(
+        message,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 40,
+          color: Colors.cyan[900],
+        ),
       ),
     );
   }
@@ -65,7 +80,6 @@ class HomePageScreen extends StatelessWidget {
       ],
     );
   }
-
 }
 
 class IntentionChoiceScreen extends StatelessWidget {
@@ -74,6 +88,8 @@ class IntentionChoiceScreen extends StatelessWidget {
     "Think before I talk.",
     "Don't disregard other's opinions."
   ];
+
+  final Map<int, Widget> nextScreen = {0: DontInterruptOthersScreen()};
 
   @override
   Widget build(BuildContext context) {
@@ -84,16 +100,7 @@ class IntentionChoiceScreen extends StatelessWidget {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Container(
-          child: Text(
-            "What's your intention for the interaction?",
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 40,
-              color: Colors.cyan[900],
-            ),
-          ),
-        ),
+        MindIn.centralMessage("What's your intention for the interaction?"),
         Container(
           height: 200,
           child: ListView.builder(
@@ -101,13 +108,51 @@ class IntentionChoiceScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Center(
                     child: OutlineButton(
-                      borderSide: BorderSide(),
-                      child: Text(intentions[index]),
-                      onPressed: () => print("pressed"),
-                    ));
+                  borderSide: BorderSide(),
+                  child: Text(intentions[index]),
+                  onPressed: () => Navigator.push(
+                        context,
+                        FadeRoute(page: nextScreen[0]),
+                      ),
+                ));
               }),
         )
       ],
     );
+  }
+}
+
+class DontInterruptOthersScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => DontInterruptOthersScreenState();
+}
+
+class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
+  var _currentMessageIndex = 0;
+  var timer;
+
+  final messages = [
+    "Appreciate what others have to say.",
+    "Listen. Don't just wait for your time to talk.",
+  ];
+
+  void initState() {
+    timer = new Timer(new Duration(seconds: 5), () => update());
+    super.initState();
+  }
+
+  void update() {
+    setState(() {
+      _currentMessageIndex++;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, mainScreenWidget());
+  }
+
+  Widget mainScreenWidget() {
+    return MindIn.centralMessage(messages[_currentMessageIndex]);
   }
 }
