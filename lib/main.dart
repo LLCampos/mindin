@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mindin/fade_route.dart';
 import 'package:mindin/mindin_theme.dart';
 
 void main() => runApp(MindIn());
@@ -57,7 +58,7 @@ class HomePageScreen extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => IntentionChoiceScreen()),
+              FadeRoute(page: IntentionChoiceScreen()),
             );
           },
         )
