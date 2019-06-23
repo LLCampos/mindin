@@ -12,42 +12,31 @@ class MindIn extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'MindIn',
       theme: MindInTheme.getThemeData(),
-      home: HomePage(),
+      home: HomePageScreen(),
     );
   }
-}
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  Widget _widgetInFocus;
-
-  @override
-  void initState() {
-    super.initState();
-    setWidgetInFocus(_startWidget());
-  }
-
-  @override
-  Widget build(BuildContext context) {
+  static Widget scaffold(BuildContext context, Widget bodyWidget) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).backgroundColor,
+        elevation: 0.0,
+      ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
-        child: _widgetInFocus,
+        child: bodyWidget,
       ),
     );
   }
+}
 
-  void setWidgetInFocus(Widget widget) {
-    setState(() {
-      _widgetInFocus = widget;
-    });
+class HomePageScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, this.mainScreenWidget(context));
   }
 
-  Widget _startWidget() {
+  Widget mainScreenWidget(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -65,19 +54,32 @@ class _HomePageState extends State<HomePage> {
           color: Colors.cyan[900],
           textColor: Colors.white,
           child: Text("Let's start"),
-          onPressed: () => setWidgetInFocus(intentionChoiceWidget()),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => IntentionChoiceScreen()),
+            );
+          },
         )
       ],
     );
   }
 
-  Widget intentionChoiceWidget() {
-    final intentions = [
-      "Don't interrupt others. Listen more.",
-      "Think before I talk.",
-      "Don't disregard other's opinions."
-    ];
+}
 
+class IntentionChoiceScreen extends StatelessWidget {
+  final intentions = [
+    "Don't interrupt others. Listen more.",
+    "Think before I talk.",
+    "Don't disregard other's opinions."
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, mainScreenWidget());
+  }
+
+  Widget mainScreenWidget() {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -100,8 +102,8 @@ class _HomePageState extends State<HomePage> {
                     child: OutlineButton(
                       borderSide: BorderSide(),
                       child: Text(intentions[index]),
-                      onPressed: () => setState(() => print("pressed")),
-                ));
+                      onPressed: () => print("pressed"),
+                    ));
               }),
         )
       ],
