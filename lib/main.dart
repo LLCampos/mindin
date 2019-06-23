@@ -128,23 +128,35 @@ class DontInterruptOthersScreen extends StatefulWidget {
 }
 
 class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
-  var _currentMessageIndex = 0;
-  var timer;
+  var _currentMsgIndex = 0;
+  var _opacity = 1.0;
 
-  final messages = [
+  final _fadeDurationMillis = 500;
+  final _messages = [
     "Appreciate what others have to say.",
     "Listen. Don't just wait for your time to talk.",
   ];
 
-  void initState() {
-    timer = new Timer(new Duration(seconds: 5), () => update());
-    super.initState();
+  void increaseMsgIndexWithChangeOfOpacity() {
+    setState(() => _opacity = 0);
+    Future.delayed(
+        Duration(milliseconds: _fadeDurationMillis),
+        () => setState(() {
+              _currentMsgIndex++;
+              _opacity = 1;
+            }));
   }
 
   void update() {
-    setState(() {
-      _currentMessageIndex++;
-    });
+    if (_currentMsgIndex + 1 == _messages.length) {
+      _currentMsgIndex = 0;
+      Navigator.push(
+        context,
+        FadeRoute(page: MeditationScreen()),
+      );
+    } else {
+      increaseMsgIndexWithChangeOfOpacity();
+    }
   }
 
   @override
@@ -153,6 +165,26 @@ class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
   }
 
   Widget mainScreenWidget() {
-    return MindIn.centralMessage(messages[_currentMessageIndex]);
+    return AnimatedOpacity(
+        duration: Duration(milliseconds: _fadeDurationMillis),
+        opacity: _opacity,
+        child: GestureDetector(
+          child: MindIn.centralMessage(_messages[_currentMsgIndex]),
+          onTap: () {
+            update();
+          },
+        ));
+  }
+}
+
+class MeditationScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, mainScreenWidget());
+  }
+
+  Widget mainScreenWidget() {
+    return MindIn.centralMessage(
+        "Spend 2 minutes meditating about your intention for the interaction");
   }
 }
