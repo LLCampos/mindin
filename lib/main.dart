@@ -1,5 +1,4 @@
-import 'dart:async';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mindin/fade_route.dart';
@@ -129,23 +128,12 @@ class DontInterruptOthersScreen extends StatefulWidget {
 
 class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
   var _currentMsgIndex = 0;
-  var _opacity = 1.0;
 
-  final _fadeDurationMillis = 500;
+  final _fadeDurationMillis = 1000;
   final _messages = [
     "Appreciate what others have to say.",
     "Listen. Don't just wait for your time to talk.",
   ];
-
-  void increaseMsgIndexWithChangeOfOpacity() {
-    setState(() => _opacity = 0);
-    Future.delayed(
-        Duration(milliseconds: _fadeDurationMillis),
-        () => setState(() {
-              _currentMsgIndex++;
-              _opacity = 1;
-            }));
-  }
 
   void update() {
     if (_currentMsgIndex + 1 == _messages.length) {
@@ -155,7 +143,9 @@ class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
         FadeRoute(page: MeditationScreen()),
       );
     } else {
-      increaseMsgIndexWithChangeOfOpacity();
+      setState(() {
+        _currentMsgIndex++;
+      });
     }
   }
 
@@ -165,10 +155,13 @@ class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
   }
 
   Widget mainScreenWidget() {
-    return AnimatedOpacity(
+    return AnimatedSwitcher(
         duration: Duration(milliseconds: _fadeDurationMillis),
-        opacity: _opacity,
+        transitionBuilder: (Widget child, Animation<double> animation) {
+          return FadeTransition(child: child, opacity: animation);
+        },
         child: GestureDetector(
+          key: ValueKey<int>(_currentMsgIndex),
           child: MindIn.centralMessage(_messages[_currentMsgIndex]),
           onTap: () {
             update();
