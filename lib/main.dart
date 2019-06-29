@@ -6,7 +6,10 @@ import 'package:mindin/timer/bloc/bloc.dart';
 import 'package:mindin/fade_route.dart';
 import 'package:mindin/mindin_theme.dart';
 import 'package:mindin/timer/ticker.dart';
+import 'package:mindin/timer/timer.dart';
 
+
+const FadeDurationMillis = 1000;
 
 void main() => runApp(MindIn());
 
@@ -160,7 +163,6 @@ class DontDisregardOtherOpinions extends StatefulWidget {
 class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
   List<String> messages;
   var _currentMsgIndex = 0;
-  final _fadeDurationMillis = 1000;
 
   MessagesSlidesScreen(this.messages): assert(messages.isNotEmpty);
 
@@ -169,7 +171,7 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
       _currentMsgIndex = 0;
       Navigator.push(
         context,
-        FadeRoute(page: MeditationPreparationScreen()),
+        FadeRoute(page: MeditationScreen()),
       );
     } else {
       setState(() {
@@ -185,7 +187,7 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
 
   Widget mainScreenWidget() {
     return AnimatedSwitcher(
-        duration: Duration(milliseconds: _fadeDurationMillis),
+        duration: Duration(milliseconds: FadeDurationMillis),
         transitionBuilder: (Widget child, Animation<double> animation) {
           return FadeTransition(child: child, opacity: animation);
         },
@@ -199,48 +201,29 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
   }
 }
 
-// TODO join all meditation related to screens in one screen
-class MeditationPreparationScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => MeditationPreparationScreenState();
-}
-
-class MeditationPreparationScreenState extends State<MeditationPreparationScreen> {
-  Widget _widget = MindIn.centralMessage(
-  "Spend 2 minutes meditating about your intention for the interaction");
-
-  @override
-  Widget build(BuildContext context) {
-    return MindIn.scaffold(context, mainScreenWidget());
-  }
-
-  Widget mainScreenWidget() {
-    return Container(
-      child: GestureDetector(
-        child: _widget,
-        onTap: () => Navigator.push(
-            context,
-            FadeRoute(page: MeditationScreen())),
-      ),
-    );
-  }
-}
-
 class MeditationScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MeditationScreenState();
 }
 
 class MeditationScreenState extends State<MeditationScreen> {
-  final TimerBloc _timerBloc = TimerBloc(
-      ticker: Ticker(), duration: 120);
+  Widget _currentWidget;
+  final TimerBloc _timerBloc = TimerBloc(ticker: Ticker(), duration: 120);
 
   @override
-  Widget build(BuildContext context) {
-    return MindIn.scaffold(context, mainScreenWidget());
+  void initState() {
+    _currentWidget = meditationPreparation();
+    super.initState();
+}
+
+  Widget meditationPreparation() {
+    return GestureDetector(
+      child: MindIn.centralMessage("Spend 2 minutes meditating about your intention for the interaction"),
+      onTap: () => setState(() => _currentWidget = meditationTimer()),
+    );
   }
 
-  Widget mainScreenWidget() {
+  Widget meditationTimer() {
     return BlocProvider(
       bloc: _timerBloc,
       child: Timer(),
@@ -248,42 +231,22 @@ class MeditationScreenState extends State<MeditationScreen> {
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, AnimatedSwitcher(
+      duration: Duration(milliseconds: FadeDurationMillis),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        return FadeTransition(child: child, opacity: animation);
+      },
+      child: Container(
+        key: ValueKey<String>(_currentWidget.toStringShort()),
+        child: _currentWidget,
+      ),
+    ));
   }
-
-}
-
-// TODO probaby could also go to timer/ directory
-class Timer extends StatelessWidget {
 
   @override
-  Widget build(BuildContext context) {
-    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
-    return BlocBuilder(
-      bloc: _timerBloc,
-      builder: (context, state) {
-        final String minutesStr = ((state.duration / 60) % 60)
-            .floor()
-            .toString()
-            .padLeft(2, '0');
-        final String secondsStr = (state.duration % 60).floor().toString().padLeft(2, '0');
-        return GestureDetector(
-          child: MindIn.centralMessage('$minutesStr:$secondsStr'),
-          onTap: () => _mapStateToAction(_timerBloc)
-        );
-      },
-    );
+  void dispose() {
+    _timerBloc.dispose();
+    super.dispose();
   }
-
-  void _mapStateToAction(TimerBloc timerBloc) {
-    if (timerBloc.currentState is Ready) {
-      timerBloc.dispatch(Start(duration: timerBloc.initialState.duration));
-    } else if (timerBloc.currentState is Running) {
-      timerBloc.dispatch(Pause());
-    } else if (timerBloc.currentState is Paused) {
-      timerBloc.dispatch(Resume());
-    }
-  }
-
 }
