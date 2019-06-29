@@ -88,7 +88,11 @@ class IntentionChoiceScreen extends StatelessWidget {
     "Don't disregard other's opinions."
   ];
 
-  final Map<int, Widget> nextScreen = {0: DontInterruptOthersScreen()};
+  final Map<int, Widget> nextScreen = {
+    0: DontInterruptOthersScreen(),
+    1: ThinkBeforeTalkScreen(),
+    2: DontDisregardOtherOpinions(),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +115,7 @@ class IntentionChoiceScreen extends StatelessWidget {
                   child: Text(intentions[index]),
                   onPressed: () => Navigator.push(
                         context,
-                        FadeRoute(page: nextScreen[0]),
+                        FadeRoute(page: nextScreen[index]),
                       ),
                 ));
               }),
@@ -122,21 +126,42 @@ class IntentionChoiceScreen extends StatelessWidget {
 }
 
 class DontInterruptOthersScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => DontInterruptOthersScreenState();
-}
-
-class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
-  var _currentMsgIndex = 0;
-
-  final _fadeDurationMillis = 1000;
-  final _messages = [
+  final messages = [
     "Appreciate what others have to say.",
     "Listen. Don't just wait for your time to talk.",
   ];
 
+  @override
+  State<StatefulWidget> createState() => MessagesSlidesScreen(messages);
+}
+
+class ThinkBeforeTalkScreen extends StatefulWidget {
+  final messages = [
+    "Reflect on what you're going to say before saying it",
+    "There's no rush",
+    "Better to wait than saying something you will regret",
+  ];
+
+  @override
+  State<StatefulWidget> createState() => MessagesSlidesScreen(messages);
+}
+
+class DontDisregardOtherOpinions extends StatefulWidget {
+  final messages = ["placeholder"];
+
+  @override
+  State<StatefulWidget> createState() => MessagesSlidesScreen(messages);
+}
+
+class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
+  List<String> messages;
+  var _currentMsgIndex = 0;
+  final _fadeDurationMillis = 1000;
+
+  MessagesSlidesScreen(this.messages): assert(messages.isNotEmpty);
+
   void update() {
-    if (_currentMsgIndex + 1 == _messages.length) {
+    if (_currentMsgIndex + 1 == messages.length) {
       _currentMsgIndex = 0;
       Navigator.push(
         context,
@@ -162,7 +187,7 @@ class DontInterruptOthersScreenState extends State<DontInterruptOthersScreen> {
         },
         child: GestureDetector(
           key: ValueKey<int>(_currentMsgIndex),
-          child: MindIn.centralMessage(_messages[_currentMsgIndex]),
+          child: MindIn.centralMessage(messages[_currentMsgIndex]),
           onTap: () {
             update();
           },
