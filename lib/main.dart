@@ -165,7 +165,7 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
       _currentMsgIndex = 0;
       Navigator.push(
         context,
-        FadeRoute(page: MeditationScreen()),
+        FadeRoute(page: MeditationPreparationScreen()),
       );
     } else {
       setState(() {
@@ -195,14 +195,46 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
   }
 }
 
-class MeditationScreen extends StatelessWidget {
+class MeditationPreparationScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MeditationPreparationScreenState();
+}
+
+class MeditationPreparationScreenState extends State<MeditationPreparationScreen> {
+  Widget _widget = MindIn.centralMessage(
+  "Spend 2 minutes meditating about your intention for the interaction");
+
   @override
   Widget build(BuildContext context) {
     return MindIn.scaffold(context, mainScreenWidget());
   }
 
   Widget mainScreenWidget() {
-    return MindIn.centralMessage(
-        "Spend 2 minutes meditating about your intention for the interaction");
+    return Container(
+      child: GestureDetector(
+        child: _widget,
+        onTap: () => Navigator.push(
+            context,
+            FadeRoute(page: MeditationScreen())),
+      ),
+    );
   }
+}
+
+class MeditationScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() => MeditationScreenState();
+}
+
+class MeditationScreenState extends State<MeditationScreen> {
+
+  @override
+  Widget build(BuildContext context) {
+    return MindIn.scaffold(context, mainScreenWidget());
+  }
+
+  Widget mainScreenWidget() {
+    return MindIn.centralMessage("yoh");
+  }
+
 }
