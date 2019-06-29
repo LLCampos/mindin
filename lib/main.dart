@@ -1,8 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mindin/timer/bloc/bloc.dart';
 import 'package:mindin/fade_route.dart';
 import 'package:mindin/mindin_theme.dart';
+import 'package:mindin/timer/ticker.dart';
+
 
 void main() => runApp(MindIn());
 
@@ -195,6 +199,7 @@ class MessagesSlidesScreen<T extends StatefulWidget> extends State<T> {
   }
 }
 
+// TODO join all meditation related to screens in one screen
 class MeditationPreparationScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => MeditationPreparationScreenState();
@@ -227,6 +232,8 @@ class MeditationScreen extends StatefulWidget {
 }
 
 class MeditationScreenState extends State<MeditationScreen> {
+  final TimerBloc _timerBloc = TimerBloc(
+      ticker: Ticker(), duration: 120);
 
   @override
   Widget build(BuildContext context) {
@@ -234,7 +241,49 @@ class MeditationScreenState extends State<MeditationScreen> {
   }
 
   Widget mainScreenWidget() {
-    return MindIn.centralMessage("yoh");
+    return BlocProvider(
+      bloc: _timerBloc,
+      child: Timer(),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+}
+
+// TODO probaby could also go to timer/ directory
+class Timer extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    final TimerBloc _timerBloc = BlocProvider.of<TimerBloc>(context);
+    return BlocBuilder(
+      bloc: _timerBloc,
+      builder: (context, state) {
+        final String minutesStr = ((state.duration / 60) % 60)
+            .floor()
+            .toString()
+            .padLeft(2, '0');
+        final String secondsStr = (state.duration % 60).floor().toString().padLeft(2, '0');
+        return GestureDetector(
+          child: MindIn.centralMessage('$minutesStr:$secondsStr'),
+          onTap: () => _mapStateToAction(_timerBloc)
+        );
+      },
+    );
+  }
+
+  void _mapStateToAction(TimerBloc timerBloc) {
+    if (timerBloc.currentState is Ready) {
+      timerBloc.dispatch(Start(duration: timerBloc.initialState.duration));
+    } else if (timerBloc.currentState is Running) {
+      timerBloc.dispatch(Pause());
+    } else if (timerBloc.currentState is Paused) {
+      timerBloc.dispatch(Resume());
+    }
   }
 
 }
