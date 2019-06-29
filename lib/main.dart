@@ -224,9 +224,21 @@ class MeditationScreenState extends State<MeditationScreen> {
   }
 
   Widget meditationTimer() {
-    return BlocProvider(
+    return BlocListener(
       bloc: _timerBloc,
-      child: Timer(),
+      listener: (context, state) {
+        if (state is Finished) {
+          setState(() => _currentWidget = meditationFinished());
+        }
+      },
+      child: Timer(_timerBloc),
+    );
+  }
+
+  Widget meditationFinished() {
+    return GestureDetector(
+      child: MindIn.centralMessage("Good job :)"),
+      onTap: () => Navigator.popUntil(context, ModalRoute.withName('/')),
     );
   }
 
