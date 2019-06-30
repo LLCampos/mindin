@@ -28,6 +28,9 @@ class MindIn extends StatelessWidget {
   static Widget scaffold(BuildContext context, Widget bodyWidget) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Theme.of(context).primaryColorDark,
+        ),
         backgroundColor: Theme.of(context).backgroundColor,
         elevation: 0.0,
       ),
@@ -45,7 +48,6 @@ class MindIn extends StatelessWidget {
         textAlign: TextAlign.center,
         style: TextStyle(
           fontSize: 40,
-          color: Colors.cyan[900],
         ),
       ),
     );
@@ -67,13 +69,12 @@ class HomePageScreen extends StatelessWidget {
             "MindIn",
             style: TextStyle(
               fontSize: 60,
-              color: Colors.cyan[900],
             ),
           ),
         ),
         SizedBox(height: 20),
         MaterialButton(
-          color: Colors.cyan[900],
+          color: Theme.of(context).buttonColor,
           textColor: Colors.white,
           child: Text("Let's start"),
           onPressed: () {
@@ -118,9 +119,13 @@ class IntentionChoiceScreen extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return Center(
                     child: OutlineButton(
-                  borderSide: BorderSide(),
-                  child: Text(intentions[index]),
-                  onPressed: () => Navigator.push(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).buttonColor,
+                      ),
+                      textColor: Theme.of(context).textTheme.body1.color,
+                      highlightedBorderColor: Theme.of(context).textTheme.body1.color,
+                      child: Text(intentions[index]),
+                      onPressed: () => Navigator.push(
                         context,
                         FadeRoute(page: nextScreen[index]),
                       ),
