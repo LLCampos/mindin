@@ -32,7 +32,7 @@ class MindIn extends StatelessWidget {
           color: Theme.of(context).primaryColorDark,
         ),
         backgroundColor: Theme.of(context).backgroundColor,
-        elevation: 0.0,
+        elevation: 0.5,
       ),
       backgroundColor: Theme.of(context).backgroundColor,
       body: Center(
@@ -43,11 +43,12 @@ class MindIn extends StatelessWidget {
 
   static Widget centralMessage(String message) {
     return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Text(
         message,
         textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 40,
+          fontSize: 35,
         ),
       ),
     );
@@ -112,24 +113,25 @@ class IntentionChoiceScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         MindIn.centralMessage("What's your intention for the interaction?"),
+        SizedBox(height: 20),
         Container(
           height: 200,
           child: ListView.builder(
               itemCount: intentions.length,
               itemBuilder: (BuildContext context, int index) {
                 return Center(
-                    child: OutlineButton(
-                      borderSide: BorderSide(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 3.0),
+                      child: MaterialButton(
                         color: Theme.of(context).buttonColor,
-                      ),
-                      textColor: Theme.of(context).textTheme.body1.color,
-                      highlightedBorderColor: Theme.of(context).textTheme.body1.color,
-                      child: Text(intentions[index]),
-                      onPressed: () => Navigator.push(
-                        context,
-                        FadeRoute(page: nextScreen[index]),
-                      ),
-                ));
+                        textColor: Colors.white,
+                        child: Text(intentions[index]),
+                        onPressed: () => Navigator.push(
+                          context,
+                          FadeRoute(page: nextScreen[index]),
+                        ),
+                ),
+                    ));
               }),
         )
       ],
@@ -139,8 +141,8 @@ class IntentionChoiceScreen extends StatelessWidget {
 
 class DontInterruptOthersScreen extends StatefulWidget {
   final messages = [
-    "Appreciate what others have to say.",
-    "Listen. Don't just wait for your time to talk.",
+    "Appreciate what others have to say",
+    "Listen. Don't just wait for your time to talk",
   ];
 
   @override
