@@ -76,7 +76,7 @@ class HomePageScreen extends StatelessWidget {
         SizedBox(height: 20),
         MaterialButton(
           color: Theme.of(context).buttonColor,
-          textColor: Colors.white,
+          textColor: Theme.of(context).textTheme.button.color,
           child: Text("Let's start"),
           onPressed: () {
             Navigator.push(
@@ -124,7 +124,7 @@ class IntentionChoiceScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 3.0),
                       child: MaterialButton(
                         color: Theme.of(context).buttonColor,
-                        textColor: Colors.white,
+                        textColor: Theme.of(context).textTheme.button.color,
                         child: Text(intentions[index]),
                         onPressed: () => Navigator.push(
                           context,

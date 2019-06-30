@@ -11,7 +11,12 @@ class MindInTheme {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         ),
         textTheme: new TextTheme(
+          button: new TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w400
+          ),
           body1: new TextStyle(
+              fontWeight: FontWeight.w300,
               color: Color(0xff7c765c)
           )
         )
